@@ -5,6 +5,7 @@ import sys
 class App:
     def __init__(self):
         app = QApplication(sys.argv)
+        
         window = Window()
 
         # Utworzenie głównego okna

@@ -5,3 +5,6 @@ class WindowValues(Enum):
 
 class Style(Enum):
     BUTTON_COLOR = "#007BFF"
+class MapValues(Enum):
+    PUPK_VALUE = 'Ilość samochodów użytkowych'
+    PEPR_VALUE = 'Ilość samochodów elektrycznych'
