@@ -5,6 +5,7 @@ class ControlsPanel(QWidget):
     def __init__(self):
         super().__init__()
         self.set_ui()
+        #self.button1.onclick.connect()
     def set_ui(self):
         self.layout = QHBoxLayout()
 
@@ -22,10 +23,12 @@ class ControlsPanel(QWidget):
             background-color: #0056b3;       /* ciemniejszy niebieski po najechaniu */
         }}
         """)
+        self.button1 = button1
         self.layout.addWidget(button1)
 
         button2 = QPushButton("P. E. P. R.")
         button2.setMinimumHeight(40)
+        self.button2 = button2
         button2.setStyleSheet(f"""
         QPushButton {{
             background-color: {Style.BUTTON_COLOR.value};       /* niebieski */
@@ -44,6 +47,7 @@ class ControlsPanel(QWidget):
 
         button3 = QPushButton("Wykres")
         button3.setMinimumHeight(40)
+        self.button3 = button3
         button3.setStyleSheet(f"""
         QPushButton {{
             background-color: {Style.BUTTON_COLOR.value};       /* niebieski */
@@ -58,7 +62,12 @@ class ControlsPanel(QWidget):
         """)
         self.layout.addWidget(button3)
 
-        self.layout.setSpacing(0)        # odstęp między widgetami = 0
-        self.layout.setContentsMargins(0, 0, 0, 0)  # marginesy wewnątrz layoutu = 0
+        self.layout.setSpacing(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
 
         self.setLayout(self.layout)
+
+    def connect_buttons(self,f1,f2,f3):
+        self.button1.clicked.connect(f1)
+        self.button2.clicked.connect(f2)
+        self.button3.clicked.connect(f3)

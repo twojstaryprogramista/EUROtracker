@@ -1,47 +1,56 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QSpacerItem, QSizePolicy
+
 from utils.names import WindowValues
-from view.controls_panel import ControlsPanel
-from view.map import MapView
-from utils.geo_renderer import GeoRenderer
-from view.slider import Slider
-# Utworzenie aplikacji
-from PyQt5.QtGui import QColor
 from PyQt5.QtCore import Qt
 
 
-
 class Window(QWidget):
-    def __init__(self):
+    def __init__(self,controls_panel,workspace,slider):
         super().__init__()
-        g = GeoRenderer()
+        self._current_spacer=None
+        self.controls_panel = controls_panel
+        self.workspace = workspace
+        self.slider = slider
         self.set_ui()
-
-        # Pokazanie okna
     def set_ui(self):
+        self.set_window()
+        self.set_content()
+
+
+
+
+
+
+    def set_window(self):
         self.setWindowTitle(WindowValues.APP_NAME.value)
         self.setWindowFlags(Qt.Window |
                     Qt.WindowTitleHint |
                     Qt.WindowMinimizeButtonHint |
-                    Qt.WindowCloseButtonHint)  # tylko przycisk zamykania i tytuł
+                    Qt.WindowCloseButtonHint)
 
-        self.setFixedSize(800, 500)  # (x, y, szerokość, wysokość)
-
-        self.controls_panel = ControlsPanel()
-        self.workspace = MapView()
-        self.slider = Slider()
-
-
+        self.setFixedSize(WindowValues.WIDTH.value, WindowValues.HEIGHT.value)
+    def set_content(self):
         self.layout = QVBoxLayout()
         
-        self.layout.setSpacing(0)        # odstęp między widgetami = 0
-        self.layout.setContentsMargins(0, 0, 0, 0)  # marginesy wewnątrz layoutu = 0
+        self.layout.setSpacing(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.controls_panel)
         self.layout.addWidget(self.workspace)
         self.layout.addWidget(self.slider)
         self.layout.addSpacing(20)
 
-
-
         self.setLayout(self.layout)
-#window = Window()
+    def set_workspace(self,workspace,remove):
+        if remove == True:
+            if self._current_spacer==None:
+                self.workspace.setParent(None)
+                
+                spacer = QSpacerItem(0, 480, QSizePolicy.Minimum, QSizePolicy.Fixed)  # wysokość 100px
 
+                self.layout.insertSpacerItem(1, spacer)  # na miejsce 1 (tam gdzie był widget)
+
+                self._current_spacer = spacer
+        else:
+            self.layout.removeItem(self._current_spacer)
+            self._current_spacer=None
+            self.layout.insertWidget(1,self.workspace)

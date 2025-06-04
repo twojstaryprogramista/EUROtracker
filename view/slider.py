@@ -1,6 +1,5 @@
 from superqt import QLabeledRangeSlider
-from PyQt5.QtGui import QColor
-
+from utils.names import SliderValues
 
 class Slider(QLabeledRangeSlider):
     def __init__(self):
@@ -8,11 +7,11 @@ class Slider(QLabeledRangeSlider):
         self.__set_ui__()
     def __set_ui__(self):
 
-        self.setMinimum(2001)
-        self.setMaximum(2025)
+        self.setMinimum(SliderValues.MIN.value)
+        self.setMaximum(SliderValues.MAX.value)
 
-        # Aktualny zakres wybrany przez użytkownika (np. 20–80)
-        self.setValue((2010, 2013))  # lub slider.setRange(20, 80)
+        
+        self.setValue((2010, 2013))
 
         self.setStyleSheet("""
 QSlider::groove:horizontal {
