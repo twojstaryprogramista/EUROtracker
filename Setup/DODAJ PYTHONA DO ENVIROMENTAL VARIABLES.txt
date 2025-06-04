@@ -1,0 +1,4 @@
+PODCZAS INSTALACJI WYBIERZ ADD PYTHON TO ENVIROMENTAL VARIABLES CZY COS TAKIEGO
+
+jak nie bedzie webengine sie odpalac to w razie czego
+python -m pip install PyQtWebEngine
