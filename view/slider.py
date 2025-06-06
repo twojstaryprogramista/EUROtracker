@@ -2,6 +2,7 @@ from superqt import QLabeledRangeSlider
 from utils.names import SliderValues
 
 class Slider(QLabeledRangeSlider):
+
     def __init__(self):
         super().__init__()
         self.__set_ui__()

@@ -1,12 +1,52 @@
 import plotly.express as px
 import json
+from utils.file_utils import readElectricVehicles, readEndOfLifeVechicles
 from utils.names import MapValues, ModelValues
 from model.html_creator import HTMLCreator
+from view.map import MapView
 
 
 class GeoRenderer:
 
+    eol_data = []
+    electrical_data = []
+
+    slider_from = 2013
+    slider_to = 2022
+
+    def get_sum_for_country_in_range(country, from_year, to_year):
+        # Filter and sum values in the given range, ignore invalid values like ':'
+        total = 0
+        for entry in country['values']:
+            year = entry['year']
+            value = entry['value']
+            if from_year <= year <= to_year:
+                if isinstance(value, (int, float)):
+                    total += value
+                else:
+                    print(f"Skipping invalid value for {country['country']} in {year}: {value}")
+
+        return total
+
+    def setPolandValue(self, value):
+        GeoRenderer.slider_from = value[0]
+        GeoRenderer.slider_to = value[1]
+
+        #self.values[self.countries.index('Poland')]= value[0]
+
+        #go trough all countries and set value from eol using country name as key
+        for country in GeoRenderer.eol_data:
+            if country['country'] in self.countries:
+                #print(f"Setting value for {country['country']}")
+                self.values[self.countries.index(country['country'])] = GeoRenderer.get_sum_for_country_in_range(country, GeoRenderer.slider_from, GeoRenderer.slider_to)
+
+        self.fig = self.__map_setup()
+        self.html_creator.save(self.fig)
+
     def __init__(self):
+        GeoRenderer.eol_data = readEndOfLifeVechicles()
+        GeoRenderer.electrical_data = readElectricVehicles()
+
         self.save_path = str(ModelValues.MAP_DIR.value)
         self.html_creator = HTMLCreator()
         self.geojson_data=self.__read()

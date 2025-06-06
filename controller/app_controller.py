@@ -26,6 +26,12 @@ class App:
             self.controls_panel.connect_buttons(self.change_to_pupk,self.change_to_pupk,self.change_to_chart)
             self.workspace = MapView()
             self.slider = Slider()
+            
+            self.slider.valueChanged.connect(
+                lambda value: (self.g.setPolandValue(value), self.workspace.reload())
+            )
+
+
             self.window = Window(self.controls_panel,self.workspace,self.slider)
             self.window.show()
             sys.exit(self.app.exec_())
