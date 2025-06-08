@@ -39,13 +39,14 @@ class MapValues(Enum):
 
 class ModelValues(Enum):
     SCRIPT_DIR = Path(__file__).resolve().parent.parent
-    MAP_DIR = SCRIPT_DIR / "resources" / "map.html"
+    MAP_DIR = SCRIPT_DIR / "resources" / "map_countries.html"
+    REGIONS_MAP_DIR = SCRIPT_DIR / "resources" / "map_regions.html"
     COUNTRIES_DATA_DIR = SCRIPT_DIR / "resources" / "countries" / "europa.geojson"
-    REGIONS_DATA_DIR = SCRIPT_DIR / "resources" / "regions" / "europa.geojson"
+    REGIONS_DATA_DIR = SCRIPT_DIR / "resources" / "regions" / "NUTS_RG_01M_2024_4326.geojson"
     END_OF_LIFE_VEHICLES_RANGE_MIN = 2013
-    END_OF_LIFE_VEHICLES_RANGE_MAX = 2023
+    END_OF_LIFE_VEHICLES_RANGE_MAX = 2022
     ELECTRIC_VEHICLES_RANGE_MIN = 2018
-    ELECTRIC_VEHICLES_RANGE_MAX = 2023
+    ELECTRIC_VEHICLES_RANGE_MAX = 2022
     DATA_START_ROW = 10
 
 

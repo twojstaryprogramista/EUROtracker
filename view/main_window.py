@@ -7,6 +7,7 @@ from PyQt5.QtCore import Qt
 class Window(QWidget):
     def __init__(self,controls_panel,workspace,slider):
         super().__init__()
+        self.regions_map = None
         self._current_spacer=None
         self.controls_panel = controls_panel
         self.workspace = workspace
@@ -43,6 +44,8 @@ class Window(QWidget):
     def set_workspace(self,workspace,remove):
         if remove == True:
             if self._current_spacer==None:
+                if self.regions_map is not None:
+                    self.regions_map.setParent(None)
                 self.workspace.setParent(None)
                 
                 spacer = QSpacerItem(0, 480, QSizePolicy.Minimum, QSizePolicy.Fixed)  # wysokość 100px
@@ -51,6 +54,15 @@ class Window(QWidget):
 
                 self._current_spacer = spacer
         else:
+            if self.regions_map is not None:
+                self.regions_map.setParent(None)
             self.layout.removeItem(self._current_spacer)
             self._current_spacer=None
             self.layout.insertWidget(1,self.workspace)
+    def set_pepr(self, regions_map):
+        self.layout.removeItem(self._current_spacer)
+        self._current_spacer=None
+        self.regions_map = regions_map
+        self.workspace.setParent(None)
+        self.layout.insertWidget(1,self.regions_map)
+        print("PEPR")

@@ -26,7 +26,7 @@ class EndOfLifeVehicleTransformer(BaseTransformer):
         for _, row in df.iterrows():
             country_name = row.iloc[0]
             values = []
-            for year, col in zip(range(ModelValues.END_OF_LIFE_VEHICLES_RANGE_MIN.value, ModelValues.END_OF_LIFE_VEHICLES_RANGE_MAX.value), range(1, 21, 2)):
+            for year, col in zip(range(ModelValues.END_OF_LIFE_VEHICLES_RANGE_MIN.value, ModelValues.END_OF_LIFE_VEHICLES_RANGE_MAX.value+1), range(1, 21, 2)):
                 values.append({'year': year, 'value': row.iloc[col]})
             data_list.append({'country': country_name, 'values': values})
         
@@ -39,7 +39,7 @@ class ElectricVehicleTransformer(BaseTransformer):
             geo_code = row.iloc[0]
             geo_label = row.iloc[1]
             values = []
-            for year, col in zip(range(ModelValues.ELECTRIC_VEHICLES_RANGE_MIN.value, ModelValues.ELECTRIC_VEHICLES_RANGE_MAX.value), range(2, 12, 2)):
+            for year, col in zip(range(ModelValues.ELECTRIC_VEHICLES_RANGE_MIN.value, ModelValues.ELECTRIC_VEHICLES_RANGE_MAX.value+1), range(2, 12, 2)):
                 values.append({'year': year, 'value': row.iloc[col]})
             data_list.append({
                 'geo_code': geo_code,
@@ -47,6 +47,7 @@ class ElectricVehicleTransformer(BaseTransformer):
                 'values': values
             })
         return data_list
+        
 
 
 
@@ -69,4 +70,4 @@ def readEndOfLifeVechicles():
 def readElectricVehicles():
     # Electric vehicles
     loader2 = VehicleDataLoader(ExcelReader(), ElectricVehicleTransformer())
-    return loader2.load("tran_r_elvehst.xlsx", "Sheet 1", skiprows=10)
+    return loader2.load("tran_r_elvehst.xlsx", "Sheet 3", skiprows=10)

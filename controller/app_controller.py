@@ -2,11 +2,12 @@ from view.main_window import Window
 from PyQt5.QtWidgets import QApplication
 from model.geo_renderer import GeoRenderer
 from view.controls_panel import ControlsPanel
-from view.map import MapView
+from view.map import MapView, MapViewRegions
 from view.slider import Slider
 from utils.file_manager import FileManager
 from utils.file_utils import readElectricVehicles, readEndOfLifeVechicles
 import sys
+from PyQt5.QtWidgets import QSlider
 
 class App:
 
@@ -26,12 +27,18 @@ class App:
             self.app = QApplication(sys.argv)
             print("Uruchomiono")
             self.controls_panel = ControlsPanel()
-            self.controls_panel.connect_buttons(self.change_to_pupk,self.change_to_pupk,self.change_to_chart)
+            self.controls_panel.connect_buttons(self.change_to_pupk,self.change_to_pepr,self.change_to_chart)
+
+
+
             self.workspace = MapView()
+            self.regions_map = MapViewRegions()
+
             self.slider = Slider()
+            #self.slider.valueChanged.connect(lambda value: (self.g.set_values(value), self.workspace.reload()))
             
             self.slider.valueChanged.connect(
-                lambda value: (self.g.set_values(value), self.workspace.reload())
+                lambda value: (self.g.update_for_year(value), self.workspace.reload())
             )
 
 
@@ -42,6 +49,8 @@ class App:
         self.window.set_workspace(self.workspace,True)
     def change_to_pupk(self):
         self.window.set_workspace(self.workspace,False)
+    def change_to_pepr(self):
+         self.window.set_pepr(self.regions_map)
 
 
         

@@ -61,3 +61,53 @@ def readElectricVehicles() -> list:
         })
 
     return data_list[:386]
+
+def get_sum_for_country_in_range(country, from_year, to_year):
+    # Filter and sum values in the given range, ignore invalid values like ':'
+    total = 0
+    for entry in country['values']:
+        year = entry['year']
+        value = entry['value']
+        if from_year <= year <= to_year:
+            if isinstance(value, (int, float)):
+                total += value
+            else:
+                print(f"Skipping invalid value for {country['country']} in {year}: {value}")
+
+    return total
+
+
+def get_value_for_year(self, country, year):
+    for entry in country['values']:
+        
+        if entry['year'] == year:
+            value = entry['value']
+            if isinstance(value, (int, float)):
+                return value
+            else:
+                print(f"Invalid value for {country['country']} in {year}: {value}")
+                return 0  # lub None jeśli chcesz
+    print(f"No data for {country['country']} in {year}")
+    return 0  # jeśli nie ma danego roku
+
+
+
+
+
+
+def set_values(self, value):
+    #GeoRenderer.slider_from = value[0]
+    #GeoRenderer.slider_to = value[1]
+
+    #self.values[self.countries.index('Poland')]= value[0]
+
+    #go trough all countries and set value from eol using country name as key
+    for country in self.eol_data:
+        if country['country'] in self.countries:
+            #print(f"Setting value for {country['country']}")
+            #self.values[self.countries.index(country['country'])] = GeoRenderer.get_sum_for_country_in_range(country, GeoRenderer.slider_from, GeoRenderer.slider_to)
+            
+            self.values[self.countries.index(country['country'])] = self.get_value_for_year(country,value)
+
+    self.map_creator_countries.set_values(self.values)
+    self.file_manager.save_html(self.map_creator_countries.get_map())
