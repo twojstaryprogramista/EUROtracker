@@ -111,3 +111,23 @@ def set_values(self, value):
 
     self.map_creator_countries.set_values(self.values)
     self.file_manager.save_html(self.map_creator_countries.get_map())
+
+
+def set_values_for_year(self, year: int):
+    for country in self.eol_data:
+        name = country.get('country')
+        if name in self.countries:
+            value = next(
+                (
+                    v["value"] for v in country.get("values", [])
+                    if v.get("year") == year and isinstance(v.get("value"), (int, float))
+                ),
+                0
+            )
+
+            if value == 0:
+                print(f"Missing or invalid value for {name} in {year}")
+
+            self.values[self.countries.index(name)] = value
+    self.map_creator_countries.set_values(self.values)
+    self.file_manager.save_html(self.map_creator_countries.get_map())

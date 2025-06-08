@@ -110,7 +110,7 @@ class MapCreatorRegions(MapCreator):
         fig.update_traces(
             marker_line_color='black',
             marker_line_width=0.4,
-            hovertemplate='<b>%{location}</b><br>Wartość: %{z}<extra></extra>'
+            hovertemplate=f'<b>%{{location}}</b><br>{MapValues.PEPR_VALUE.value}: %{{z}}<extra></extra>'
         )
 
         fig.update_geos(

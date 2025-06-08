@@ -13,8 +13,7 @@ class GeoRenderer:
     #eol_data = []
     #electrical_data = []
 
-    slider_from = 2013
-    slider_to = 2022
+
 
 
 
@@ -23,30 +22,17 @@ class GeoRenderer:
         #self.html_creator.save(self.fig)
 
 
-    def set_values_for_year(self, year: int):
-        for country in self.eol_data:
-            name = country.get('country')
-            if name in self.countries:
-                value = next(
-                    (
-                        v["value"] for v in country.get("values", [])
-                        if v.get("year") == year and isinstance(v.get("value"), (int, float))
-                    ),
-                    0
-                )
 
-                if value == 0:
-                    print(f"Missing or invalid value for {name} in {year}")
-
-                self.values[self.countries.index(name)] = value
-        self.map_creator_countries.set_values(self.values)
-        self.file_manager.save_html(self.map_creator_countries.get_map())
 
     def update_for_year(self,year):
         values = self.file_manager.value_organizer.get_values_for_year_countries(year)
         self.map_creator_countries.set_values(values)
         self.file_manager.save_html(self.map_creator_countries.get_map())
-
+    def update_for_year_regions(self,year):
+        print("TEST")
+        values = self.file_manager.value_organizer.get_values_for_year_regions(year)
+        self.map_creator_regions.set_values(values)
+        self.file_manager.save_html_regions(self.map_creator_regions.get_map())
     def __init__(self, file_manager):
         self.file_manager = file_manager
         self.eol_data = self.file_manager.get_eol_data()
@@ -62,17 +48,19 @@ class GeoRenderer:
         self.geojson_data_regions = self.file_manager.get_geojson_data_regions()
         self.map_creator_regions = MapCreatorRegions(self.geojson_data_regions)
         
-        self.map_creator_regions.set_values(self.file_manager.value_organizer.get_values_for_year(self.electrical_data,[f["properties"]["NUTS_NAME"] for f in self.geojson_data_regions["features"]],2020))
-
+        regions_values = self.file_manager.value_organizer.get_values_for_year_regions(2020)
+        self.map_creator_regions.set_values(regions_values)
+        self.file_manager.save_html_regions(self.map_creator_regions.get_map())
 
         self.countries = [feature["properties"]["NAME"] for feature in self.geojson_data["features"]]
         self.values = [0] * len(self.countries)
         #self.values[self.countries.index('Poland')]=200
         #self.set_values([SliderValues.SLIDER_DEFAULT_MIN.value,SliderValues.SLIDER_DEFAULT_MAX.value])
-        self.set_values_for_year(SliderValues.SLIDER_DEFAULT_MIN.value)
+        countries_values = self.file_manager.value_organizer.get_values_for_year_countries(SliderValues.SLIDER_DEFAULT_MIN.value)
+        self.map_creator_countries.set_values(countries_values)
         self.file_manager.save_html(self.map_creator_countries.get_map())
         
-        self.file_manager.save_html_regions(self.map_creator_regions.get_map())
+
 
 
     

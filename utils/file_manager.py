@@ -47,6 +47,11 @@ class FileManager:
     def save_html_regions(self,map):
         self.html_creator_regions.save(map)
 
+
+
+
+
+
 class ValuesOrganizer:
     def __init__(self,eol_data, indexes_countries, electrical_data, indexes_regions):
         self.eol_data = eol_data
@@ -55,11 +60,11 @@ class ValuesOrganizer:
         self.indexes_regions = indexes_regions
 
     #rla regionow    
-    def get_values_for_year(self,data_list, regions, year):
+    def get_values_for_year_regions(self,year):
         values_for_regions = []
-        for region_name in regions:
+        for region_name in self.indexes_regions:
             # Szukamy słownika regionu w data_list po geo_label
-            region_data = next((item for item in data_list if item['geo_label'] == region_name), None)
+            region_data = next((item for item in self.electrical_data if item['geo_label'] == region_name), None)
             if region_data is None:
                 # Jeśli nie ma regionu w danych, daj 0
                 values_for_regions.append(0)

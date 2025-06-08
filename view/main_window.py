@@ -41,7 +41,11 @@ class Window(QWidget):
         self.layout.addSpacing(20)
 
         self.setLayout(self.layout)
-    def set_workspace(self,workspace,remove):
+
+    def set_workspace(self,name):
+        self.workspace.set_workspace(name)
+        self.slider.set_workspace(name)
+    def set_workspaceold(self,workspace,remove):
         if remove == True:
             if self._current_spacer==None:
                 if self.regions_map is not None:
