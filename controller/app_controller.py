@@ -4,6 +4,8 @@ from model.geo_renderer import GeoRenderer
 from view.controls_panel import ControlsPanel
 from view.map import MapView
 from view.slider import Slider
+from utils.file_manager import FileManager
+from utils.file_utils import readElectricVehicles, readEndOfLifeVechicles
 import sys
 
 class App:
@@ -18,9 +20,10 @@ class App:
         return cls._instance
 
     def __init__(self):
-            self.app = QApplication(sys.argv)
-            self.g = GeoRenderer()
             
+            self.file_manager = FileManager()
+            self.g = GeoRenderer(self.file_manager)
+            self.app = QApplication(sys.argv)
             print("Uruchomiono")
             self.controls_panel = ControlsPanel()
             self.controls_panel.connect_buttons(self.change_to_pupk,self.change_to_pupk,self.change_to_chart)
@@ -28,7 +31,7 @@ class App:
             self.slider = Slider()
             
             self.slider.valueChanged.connect(
-                lambda value: (self.g.setPolandValue(value), self.workspace.reload())
+                lambda value: (self.g.set_values(value), self.workspace.reload())
             )
 
 

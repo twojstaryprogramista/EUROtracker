@@ -1,15 +1,17 @@
 import plotly.express as px
 import json
-from utils.file_utils import readElectricVehicles, readEndOfLifeVechicles
-from utils.names import MapValues, ModelValues
+#from utils.file_utils_old import readElectricVehicles, readEndOfLifeVechicles
+
+from utils.names import MapValues, ModelValues, SliderValues
 from model.html_creator import HTMLCreator
 from view.map import MapView
-
+from model.map_creator import MapCreatorCountries
+from utils.file_manager import FileManager
 
 class GeoRenderer:
 
-    eol_data = []
-    electrical_data = []
+    #eol_data = []
+    #electrical_data = []
 
     slider_from = 2013
     slider_to = 2022
@@ -28,117 +30,47 @@ class GeoRenderer:
 
         return total
 
-    def setPolandValue(self, value):
+    def set_values(self, value):
         GeoRenderer.slider_from = value[0]
         GeoRenderer.slider_to = value[1]
 
         #self.values[self.countries.index('Poland')]= value[0]
 
         #go trough all countries and set value from eol using country name as key
-        for country in GeoRenderer.eol_data:
+        for country in self.eol_data:
             if country['country'] in self.countries:
                 #print(f"Setting value for {country['country']}")
                 self.values[self.countries.index(country['country'])] = GeoRenderer.get_sum_for_country_in_range(country, GeoRenderer.slider_from, GeoRenderer.slider_to)
 
-        self.fig = self.__map_setup()
-        self.html_creator.save(self.fig)
+        self.map_creator_countries.set_values(self.values)
+        self.html_creator.save(self.map_creator_countries.get_map())
+        #self.fig = self.__map_setup()
+        #self.html_creator.save(self.fig)
 
-    def __init__(self):
-        GeoRenderer.eol_data = readEndOfLifeVechicles()
-        GeoRenderer.electrical_data = readElectricVehicles()
+    def __init__(self, file_manager):
+        self.eol_data = file_manager.get_eol_data()
+        self.electrical_data = file_manager.get_electrical_data()
 
-        self.save_path = str(ModelValues.MAP_DIR.value)
+        #self.save_path = str(ModelValues.MAP_DIR.value)
+
+
+        #FILE MANAGER
         self.html_creator = HTMLCreator()
-        self.geojson_data=self.__read()
+
+        #FILE MANAGER
+        self.geojson_data=file_manager.get_geojson_data_countries()
+
+        #implementacja MapCreator
+        self.map_creator_countries = MapCreatorCountries(self.geojson_data)
+
         self.countries = [feature["properties"]["NAME"] for feature in self.geojson_data["features"]]
         self.values = [1] * len(self.countries)
-        self.values[self.countries.index('Poland')]=200
-        self.fig = self.__map_setup()
-        self.html_creator.save(self.fig)
-        #self.html_content = self.__editHTML(self.fig)
-        #self.__save()
+        #self.values[self.countries.index('Poland')]=200
+        self.set_values([SliderValues.SLIDER_DEFAULT_MIN.value,SliderValues.SLIDER_DEFAULT_MAX.value])
 
 
-    def __save(self):
-        with open(self.save_path, "w", encoding="utf-8") as f:
-            f.write(self.html_content)
-
-    def __read(self):
-        geo = None
-        with open(
-        str(ModelValues.GEO_DATA_DIR.value), "r", encoding="utf-8") as f:
-            geo = json.load(f)
-        return geo
     
-    def __map_setup(self):
-        fig = px.choropleth(
-        locations=self.countries,
-        geojson=self.geojson_data,
-        color=self.values,
-        featureidkey="properties.NAME",
-        projection="mercator",
-        #hover_data={"locations": False, "color": False},  # ukrywa te domyślne
-        #hover_name=countries,
-        )
-        fig.update_traces(
-        hovertemplate=f'<b>%{{location}}</b><br>{MapValues.PEPR_VALUE.value}: %{{z}}<extra></extra>'
-        )
+    
 
-        fig.update_geos(
-        #fixedrange=True,
-        #fitbounds="locations",  # Dostosuj zoom do danych
-        center={"lat": 32.0, "lon": 19.0},  # Środek Polski
-        projection_scale=2.5,
-        
-        #visible=False,          # Ukryj osie
-        #showcountries=True,     # Opcjonalnie
-        )
-
-        fig.update_layout(
-        #autosize=True,
-        margin=dict(l=0, r=0, t=0, b=0),
-        #paper_bgcolor='rgba(0,0,0,0)',
-        #plot_bgcolor='rgba(0,0,0,0)',
-        height=800,
-        dragmode=False,
-        coloraxis_colorbar=dict(
-            title="Ilość",
-            x=0.02,
-            y=0.52,
-            xanchor='left',
-            yanchor='bottom',
-            len=0.2,
-            thickness=5,
-            #bgcolor='rgba(255,255,255,0.8)',
-            #outlinewidth=0
-            )
-        )
-        return fig
-
-    def __editHTML(self,fig):
-        html_content = fig.to_html(
-        full_html=True,
-        #include_plotlyjs='cdn', 
-        config={'displayModeBar': False}
-        )
-
-        html_content = html_content.replace(
-            "<head>",
-            """<head>
-            <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-        }
-        .plot-container, .main-svg, .geo {
-            width: 100% !important;
-            height: 100% !important;
-        }
-        </style>"""
-        )
-        return html_content
 
 

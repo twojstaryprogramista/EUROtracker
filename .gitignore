@@ -220,3 +220,7 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+controller/__pycache__/app_controller.cpython-313.pyc
+utils/__pycache__/names.cpython-313.pyc
+view/__pycache__/controls_panel.cpython-313.pyc
+view/__pycache__/main_window.cpython-313.pyc

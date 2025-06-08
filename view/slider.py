@@ -12,7 +12,7 @@ class Slider(QLabeledRangeSlider):
         self.setMaximum(SliderValues.MAX.value)
 
         
-        self.setValue((2010, 2013))
+        self.setValue((SliderValues.SLIDER_DEFAULT_MIN.value, SliderValues.SLIDER_DEFAULT_MAX.value))
 
         self.setStyleSheet("""
 QSlider::groove:horizontal {
