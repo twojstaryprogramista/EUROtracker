@@ -32,8 +32,8 @@ class GeoRenderer:
         values = self.file_manager.get_values_for_year_regions(year)
         self.map_creator_regions.set_values(values)
         self.file_manager.save_regions_map(self.map_creator_regions.get_map())
-    def __init__(self, file_manager):
-        self.file_manager = file_manager
+    def __init__(self):
+        self.file_manager = FileManager()
 
         #self.save_path = str(ModelValues.MAP_DIR.value)
         self.geojson_data=self.file_manager.get_geojson_data_countries()

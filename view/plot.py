@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.colors as mcolors
-
+from utils.file_manager import FileManager
 
 class ChartArea(QWidget):
 
@@ -28,7 +28,7 @@ class ChartArea(QWidget):
         layout.addWidget(self.canvas)
         layout.addWidget(self.legend)
         self.setLayout(layout)
-        self.file_manager = file_manager
+        self.file_manager = FileManager()
         self.years = years
         if is_pupk:
             self.values = [self.file_manager.get_values_for_year_countries(year) for year in self.years]
@@ -80,11 +80,9 @@ class ChartArea(QWidget):
             new_year = []
             for country in list:
                 index = self.countries.index(country)
-                print(f"new_year.append(values[{i}][{index}])")
                 new_year.append(values[i][index])
                 self.legend_labels[index].setVisible(True)
             new_values.append(new_year)
-            print(new_year)
         self.plot_multiple_bar_charts(list,new_values,years)
 
     def plot_multiple_bar_charts(self,countries,values,years):

@@ -3,6 +3,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QScrollArea, QSizePolicy, QHBoxLayout, QLineEdit
 import random
 from view.plot import ChartArea
+from utils.file_manager import FileManager
 
 #temporary
 def get_values(names):
@@ -41,7 +42,7 @@ class SpacelessHBoxLayout(QHBoxLayout):
 class Chart(QWidget):
     def __init__(self,file_manager,is_pupk):
         super().__init__()
-        self.file_manager = file_manager
+        self.file_manager = FileManager()
         
         if is_pupk:
             self.years = self.file_manager.get_years_countries()

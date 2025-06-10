@@ -94,41 +94,47 @@ class MapManager:
 
 
 #WZORZEC FASADY
+#WZORZEC SINGLETON
 class FileManager:
-    """
-    Fasada aplikacyjna, która zarządza cyklem życia i koordynuje działanie
-    różnych komponentów systemu. Spełnia rolę centralnego punktu dostępu.
-    """
+    _instance = None
+    _initialized = False
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self):
+        if not self._initialized:
         # Wstrzykiwanie zależności i inicjalizacja komponentów
-        excel_reader = ExcelReader()
-        data_loader = DataLoader(excel_reader)
+            excel_reader = ExcelReader()
+            data_loader = DataLoader(excel_reader)
 
-        self._eol_data = data_loader.load_end_of_life_vehicles_data()
-        self._electric_vehicle_data = data_loader.load_electric_vehicles_data()
-        
-        self._geojson_data_countries = data_loader.load_geojson_data(ModelValues.COUNTRIES_DATA_DIR.value)
-        self._country_names = [f["properties"]["NAME"] for f in self._geojson_data_countries["features"]]
+            self._eol_data = data_loader.load_end_of_life_vehicles_data()
+            self._electric_vehicle_data = data_loader.load_electric_vehicles_data()
+            
+            self._geojson_data_countries = data_loader.load_geojson_data(ModelValues.COUNTRIES_DATA_DIR.value)
+            self._country_names = [f["properties"]["NAME"] for f in self._geojson_data_countries["features"]]
 
-        self._geojson_data_regions = data_loader.load_geojson_data(ModelValues.REGIONS_DATA_DIR.value, filter_level=2)
-        self._region_names = [f["properties"]["NUTS_NAME"] for f in self._geojson_data_regions["features"]]
+            self._geojson_data_regions = data_loader.load_geojson_data(ModelValues.REGIONS_DATA_DIR.value, filter_level=2)
+            self._region_names = [f["properties"]["NUTS_NAME"] for f in self._geojson_data_regions["features"]]
 
-        self._value_organizer = ValuesOrganizer(
-            self._eol_data,
-            self._country_names,
-            self._electric_vehicle_data,
-            self._region_names
-        )
+            self._value_organizer = ValuesOrganizer(
+                self._eol_data,
+                self._country_names,
+                self._electric_vehicle_data,
+                self._region_names
+            )
 
-        countries_html_creator = HTMLCreator() # Ustaw ścieżkę do zapisu
-        countries_html_creator.set_save_path(ModelValues.MAP_DIR.value)
-        regions_html_creator = HTMLCreator()
-        regions_html_creator.set_save_path(ModelValues.REGIONS_MAP_DIR.value)
+            countries_html_creator = HTMLCreator() # Ustaw ścieżkę do zapisu
+            countries_html_creator.set_save_path(ModelValues.MAP_DIR.value)
+            regions_html_creator = HTMLCreator()
+            regions_html_creator.set_save_path(ModelValues.REGIONS_MAP_DIR.value)
 
-        self._map_manager = MapManager(countries_html_creator, regions_html_creator)
+            self._map_manager = MapManager(countries_html_creator, regions_html_creator)
 
-        self._years_countries = list(range(ModelValues.END_OF_LIFE_VEHICLES_RANGE_MIN.value, ModelValues.END_OF_LIFE_VEHICLES_RANGE_MAX.value + 1))
-        self._years_regions = list(range(ModelValues.ELECTRIC_VEHICLES_RANGE_MIN.value, ModelValues.ELECTRIC_VEHICLES_RANGE_MAX.value + 1))
+            self._years_countries = list(range(ModelValues.END_OF_LIFE_VEHICLES_RANGE_MIN.value, ModelValues.END_OF_LIFE_VEHICLES_RANGE_MAX.value + 1))
+            self._years_regions = list(range(ModelValues.ELECTRIC_VEHICLES_RANGE_MIN.value, ModelValues.ELECTRIC_VEHICLES_RANGE_MAX.value + 1))
 
     # Właściwości (properties) dla bezpiecznego dostępu do danych
     def get_country_names(self):
