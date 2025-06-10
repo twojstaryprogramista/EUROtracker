@@ -45,10 +45,10 @@ class Chart(QWidget):
         
         if is_pupk:
             self.years = self.file_manager.get_years_countries()
-            self.names = self.file_manager.get_countries()
+            self.names = self.file_manager.get_country_names()
         else:
             self.years = self.file_manager.get_years_regions()
-            self.names = self.file_manager.get_regions()
+            self.names = self.file_manager.get_region_names()
         self.chart_area = ChartArea(self.file_manager,self.years,is_pupk)
         self.control_panel = ChartControlPanel(self.names,self.chart_area)
         self.__set_ui__()
@@ -158,7 +158,6 @@ class ChartControlPanel(QWidget):
             self.chart_countries.remove(name)
             self.set_neutral(index)
             self.chart_area.filter_bars(self.chart_countries,self.years)
-        print(self.chart_countries)
     def set_years(self,min_max):
         self.years = list(range(min_max[0],min_max[1]+1))
         self.chart_area.filter_bars(self.chart_countries,self.years)

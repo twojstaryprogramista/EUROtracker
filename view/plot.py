@@ -31,12 +31,12 @@ class ChartArea(QWidget):
         self.file_manager = file_manager
         self.years = years
         if is_pupk:
-            self.values = [self.file_manager.value_organizer.get_values_for_year_countries(year) for year in self.years]
+            self.values = [self.file_manager.get_values_for_year_countries(year) for year in self.years]
         else:
-            self.values = [self.file_manager.value_organizer.get_values_for_year_regions(year) for year in self.years]
+            self.values = [self.file_manager.get_values_for_year_regions(year) for year in self.years]
 
 
-        self.countries = self.file_manager.get_countries() if is_pupk else self.file_manager.get_regions()
+        self.countries = self.file_manager.get_country_names() if is_pupk else self.file_manager.get_region_names()
         self.legend_labels = []
 
         available_colors = list(mcolors.TABLEAU_COLORS.values())
@@ -73,14 +73,18 @@ class ChartArea(QWidget):
             new_values.append(self.values[index])
         values = new_values
         new_values =[]
+        
+        
         for i, year in enumerate(values):
+            
             new_year = []
-            for country in self.countries:
-                if country in list:
-                    index = self.countries.index(country)
-                    new_year.append(values[i][index])
-                    self.legend_labels[index].setVisible(True)
+            for country in list:
+                index = self.countries.index(country)
+                print(f"new_year.append(values[{i}][{index}])")
+                new_year.append(values[i][index])
+                self.legend_labels[index].setVisible(True)
             new_values.append(new_year)
+            print(new_year)
         self.plot_multiple_bar_charts(list,new_values,years)
 
     def plot_multiple_bar_charts(self,countries,values,years):

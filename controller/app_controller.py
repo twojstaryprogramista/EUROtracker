@@ -5,7 +5,6 @@ from view.controls_panel import ControlsPanel
 from view.map import MapView, MapViewRegions
 from view.slider import Slider, RangedSlider
 from utils.file_manager import FileManager
-from utils.file_utils import readElectricVehicles, readEndOfLifeVechicles
 from utils.names import ModelValues
 from view.workspace import Workspace, SliderPart
 from view.chart import Chart
