@@ -67,6 +67,36 @@ class ControlsPanel(QWidget):
 
         self.setLayout(self.layout)
 
+        self.buttons = []
+        self.buttons.append(button1)
+        self.buttons.append(button2)
+        self.buttons.append(button3)
+    def set_choosen(self,index):
+        self.buttons[index].setStyleSheet(f"""
+        QPushButton {{
+            background-color: #0056b3;       /* niebieski */
+            color: white;                    /* biały tekst */
+            font-weight: bold;               /* gruba czcionka */
+            border: none;                    /* brak obwódki */
+            padding: 10px;                   /* wewnętrzny margines */
+        }}
+        QPushButton:hover {{
+            background-color: #0056b3;       /* ciemniejszy niebieski po najechaniu */
+        }}
+        """)
+    def set_neutral(self,index):
+        self.buttons[index].setStyleSheet(f"""
+        QPushButton {{
+            background-color: {Style.BUTTON_COLOR.value};       /* niebieski */
+            color: white;                    /* biały tekst */
+            font-weight: bold;               /* gruba czcionka */
+            border: none;                    /* brak obwódki */
+            padding: 10px;                   /* wewnętrzny margines */
+        }}
+        QPushButton:hover {{
+            background-color: #0056b3;       /* ciemniejszy niebieski po najechaniu */
+        }}
+        """)
     def connect_buttons(self,f1,f2,f3):
         self.button1.clicked.connect(f1)
         self.button2.clicked.connect(f2)

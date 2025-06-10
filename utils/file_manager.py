@@ -6,7 +6,8 @@ import json
 class FileManager:
     def __init__(self):
         self.eol_data = readEndOfLifeVechicles()
-
+        self.years_countries = list(range(ModelValues.END_OF_LIFE_VEHICLES_RANGE_MIN.value,ModelValues.END_OF_LIFE_VEHICLES_RANGE_MAX.value+1))
+        self.years_regions = list(range(ModelValues.ELECTRIC_VEHICLES_RANGE_MIN.value,ModelValues.ELECTRIC_VEHICLES_RANGE_MAX.value+1))
         self.geojson_data_regions = self.__load_and_filter_geojson()
         self.indexes_regions = [f["properties"]["NUTS_NAME"] for f in self.geojson_data_regions["features"]]
 
@@ -20,8 +21,11 @@ class FileManager:
             self.geojson_data_countries = json.load(f)
         self.indexes_countries = [feature["properties"]["NAME"] for feature in self.geojson_data_countries["features"]]
         self.value_organizer = ValuesOrganizer(self.eol_data,self.indexes_countries,self.electrical_data,self.indexes_regions)
-
+    def get_countries(self):
+        return self.indexes_countries
         #print(self.indexes)
+    def get_regions(self):
+        return self.indexes_regions
     def get_eol_data(self):
         return self.eol_data
     
@@ -37,7 +41,12 @@ class FileManager:
 
         features = [f for f in data["features"] if f["properties"]["LEVL_CODE"] == 2]
         return {"type": "FeatureCollection", "features": features}
-
+    def get_years_regions(self):
+        return self.years_regions
+    
+    def get_years_countries(self):
+        return self.years_countries
+    
 
     def get_geojson_data_regions(self):
         return self.geojson_data_regions
