@@ -3,10 +3,11 @@ import pandas as pd
 from abc import ABC, abstractmethod
 from utils.names import ModelValues
 
-
-class BaseTransformer:
-    def transform(self, df):
-        raise NotImplementedError
+#WZORZEC STRATEGIA
+class BaseTransformer(ABC):
+    @abstractmethod
+    def transform(self, df: pd.DataFrame):
+        pass
 
 class ElectricVehiclesTransformer(BaseTransformer):
     def transform(self, df: pd.DataFrame):
@@ -50,59 +51,40 @@ class ExcelReader:
         except FileNotFoundError as e:
             raise RuntimeError(f"Nie znaleziono pliku: {file_path}") from e
 
-# Mock funkcji readElectricVehicles i readEndOfLifeVechicles, zakładając użycie ExcelReader
 def read_electric_vehicles() -> list:
     reader = ExcelReader()
-    df = reader.read("tran_r_elvehst.xlsx", "Sheet 3", skiprows=0) # Dostosuj nazwy plików/arkuszy
+    df = reader.read("tran_r_elvehst.xlsx", "Sheet 3", skiprows=0)
     transformer = ElectricVehiclesTransformer()
     return transformer.transform(df)
 
 def read_end_of_life_vehicles() -> list:
     reader = ExcelReader()
-    df = reader.read("env_waselvt.xlsx", "Sheet 1", skiprows=0) # Dostosuj nazwy plików/arkuszy
+    df = reader.read("env_waselvt.xlsx", "Sheet 1", skiprows=0)
     transformer = EndOfLifeVehicleTransformer()
     return transformer.transform(df)
 
 
-
-        # map_object.save(self._save_path) # Odkomentuj, jeśli to rzeczywisty obiekt mapy
-# koniec mocków
-
-
-# utils/data_loader.py (nowy moduł dla ładowania danych)
 import json
 import os
 import pandas as pd
 from typing import Dict, Any, List
 
-# Zakładam, że ExcelReader i transformery są zdefiniowane i importowane poprawnie
-# from your_excel_reader_module import ExcelReader
-# from your_transformers_module import EndOfLifeVehicleTransformer, ElectricVehiclesTransformer
-# from utils.names import ModelValues # Importuj z odpowiedniego miejsca
-
 class DataLoader:
-    """
-    Klasa odpowiedzialna za ładowanie i wstępne przetwarzanie danych z różnych źródeł.
-    Zgodna z SRP, skupia się tylko na ładowaniu.
-    """
     def __init__(self, excel_reader: ExcelReader):
         self._excel_reader = excel_reader
         self._eol_transformer = EndOfLifeVehicleTransformer()
         self._electric_transformer = ElectricVehiclesTransformer()
 
     def load_end_of_life_vehicles_data(self):
-        """Ładuje i transformuje dane o pojazdach wycofanych z eksploatacji."""
-        df = self._excel_reader.read("env_waselvt.xlsx", "Sheet 1") # Nazwa pliku i arkusza
+        df = self._excel_reader.read("env_waselvt.xlsx", "Sheet 1")
         return self._eol_transformer.transform(df)
 
     def load_electric_vehicles_data(self):
-        """Ładuje i transformuje dane o pojazdach elektrycznych."""
-        df = self._excel_reader.read("tran_r_elvehst.xlsx", "Sheet 3") # Nazwa pliku i arkusza
+        df = self._excel_reader.read("tran_r_elvehst.xlsx", "Sheet 3")
         return self._electric_transformer.transform(df)
 
     def load_geojson_data(self, file_path: str, filter_level: int = None):
-        """Ładuje dane GeoJSON i opcjonalnie filtruje je."""
-        full_path = str(file_path) # Upewnij się, że ModelValues.XXX.value jest stringiem
+        full_path = str(file_path)
         if not os.path.exists(full_path):
             raise FileNotFoundError(f"Plik GeoJSON nie istnieje: {full_path}")
         

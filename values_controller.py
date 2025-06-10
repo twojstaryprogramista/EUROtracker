@@ -1,1 +1,0 @@
-#jakies dobre rozwiazanie na ustawianie wartosci zeby ich "kodem" nie zmieniac
