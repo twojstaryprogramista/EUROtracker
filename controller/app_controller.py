@@ -1,5 +1,5 @@
 from view.main_window import Window
-from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtWidgets import QApplication
 from model.geo_renderer import GeoRenderer
 from view.controls_panel import ControlsPanel
 from view.map import MapView, MapViewRegions
@@ -9,7 +9,6 @@ from utils.names import ModelValues
 from view.workspace import Workspace, SliderPart
 from view.chart import Chart
 import sys
-from PyQt5.QtWidgets import QSlider
 
 import sys
 from PyQt5.QtWidgets import QApplication

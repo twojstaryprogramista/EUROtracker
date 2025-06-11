@@ -5,7 +5,6 @@ import random
 from view.plot import ChartArea
 from utils.file_manager import FileManager
 
-#temporary
 def get_values(names):
     rok_start = 2021
     rok_koniec = 2024
@@ -54,7 +53,6 @@ class Chart(QWidget):
         self.control_panel = ChartControlPanel(self.names,self.chart_area)
         self.__set_ui__()
     def __set_ui__(self):
-        #usun obramowanie
         self.layout = SpacelessHBoxLayout()
         self.layout.addWidget(self.chart_area)
         self.layout.addWidget(self.control_panel)
@@ -79,19 +77,16 @@ class ChartControlPanel(QWidget):
         self.resize(300, 400)
         self.buttons =[]
         self.years = [2020,2021,2022]
-        # ScrollArea
         scroll = QScrollArea()
         self.search_box = QLineEdit()
         self.search_box.setPlaceholderText(szukanie)
         self.search_box.textChanged.connect(lambda text: (self.update_list(text)))
         scroll.setWidgetResizable(True)
 
-        # Główna zawartość (kontener z przyciskami)
         content = QWidget()
         self.layout = SpacelessVBoxLayout()
 
         content.setLayout(self.layout)
-        # Dodaj przyciski
         for i in range(len(names)):
             button = QPushButton(f"{names[i]}")
             button.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
@@ -114,7 +109,6 @@ class ChartControlPanel(QWidget):
             background-color: #999999;       /* ciemniejszy niebieski po najechaniu */
         }}
         """)
-        # Główny layout okna
         self.main_layout = SpacelessVBoxLayout()
         self.main_layout.addWidget(self.search_box)
         self.main_layout.addWidget(scroll)
@@ -171,7 +165,6 @@ class ChartControlPanel(QWidget):
                 else:
                     button.hide()
         else:
-            # Reset: pokaż wszystkie
             for button in self.buttons:
                 button.show()
 

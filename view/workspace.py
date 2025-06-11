@@ -1,5 +1,4 @@
 
-from abc import ABC, abstractmethod
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QPushButton
 import sys
 from PyQt5.QtWidgets import QApplication
@@ -13,7 +12,7 @@ class Workspace(QWidget):
         self.add_workspace(initial_workspace_name,initial_workspace)
         self.__current_workspace = self.__workspaces[0]
         self.__layout = QVBoxLayout()
-        self.__layout.setContentsMargins(0, 0, 0, 0)  # top, left, bottom, right
+        self.__layout.setContentsMargins(0, 0, 0, 0)
         self.__layout.setSpacing(0)   
         self.__layout.addWidget(self.__current_workspace)
         self.setLayout(self.__layout)

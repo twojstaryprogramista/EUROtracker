@@ -1,5 +1,4 @@
 from superqt import QLabeledRangeSlider, QLabeledSlider
-from utils.names import SliderValues, ModelValues
 from PyQt5.QtCore import Qt
 
 class Slider(QLabeledSlider):

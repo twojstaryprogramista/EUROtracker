@@ -1,5 +1,4 @@
 import sys
-import random
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFileDialog
 from PyQt5.QtGui import QPainter, QColor
 from PyQt5.QtCore import Qt
@@ -87,17 +86,14 @@ class ChartArea(QWidget):
 
     def plot_multiple_bar_charts(self,countries,values,years):
         self.figure.clear()
-        # Dane przykładowe
         #countries = ['Mazowieckie', 'Śląskie', 'Wielkopolskie', 'Pomorskie']
         lata = years
 
-        # Losowe dane
         #all_values = [
         #    [random.randint(100, 600) for _ in countries]
         #    for _ in lata
         #]
 
-        # Kolory dla regionów
         #colors = {
         #    region: color for region, color in zip(
         #        countries,
@@ -110,7 +106,6 @@ class ChartArea(QWidget):
             country: available_colors[i % len(available_colors)]
             for i, country in enumerate(countries)
         }
-        # Tworzymy subplota dla każdego roku
         cols = len(lata)
 
         for i,year in enumerate(years):
@@ -123,16 +118,13 @@ class ChartArea(QWidget):
             )
         
 
-            # Ukrywamy wszystko zbędne
             ax.set_xticks([])
             #ax.set_ylim(0, max(values))
             if i > 0: ax.set_yticks([])
             for spine in ax.spines.values():
                 spine.set_visible(False)
-            # Podpisujemy rok pod wykresem
             #ax.set_ylabel('Wartość')
 
-# Opcjonalnie: ustawienie zakresu osi 
             ax.set_xlabel(str(year), labelpad=10)
 
 
@@ -154,14 +146,14 @@ class CircleWidget(QWidget):
         super().__init__(parent)
         self.color = QColor(color)
         self.diameter = diameter
-        self.setFixedSize(diameter, diameter)  # rozmiar widgetu = średnica kółka
+        self.setFixedSize(diameter, diameter)
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)  # gładkie krawędzie
+        painter.setRenderHint(QPainter.Antialiasing)
         painter.setBrush(self.color)
-        painter.setPen(Qt.NoPen)  # bez obramowania
-        painter.drawEllipse(0, 0, self.diameter, self.diameter)  # rysuj koło
+        painter.setPen(Qt.NoPen)
+        painter.drawEllipse(0, 0, self.diameter, self.diameter)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

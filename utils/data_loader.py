@@ -37,9 +37,6 @@ class EndOfLifeVehicleTransformer(BaseTransformer):
         
         return data_list
 
-
-# Zakładam, że ExcelReader jest zaimplementowany gdzieś indziej i działa poprawnie
-# z metodą read zwracającą pd.DataFrame
 class ExcelReader:
     def __init__(self, base_dir="resources/data"):
         self.base_dir = base_dir

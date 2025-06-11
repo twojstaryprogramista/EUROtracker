@@ -1,12 +1,5 @@
 import plotly.express as px
-import json
-#from utils.file_utils_old import readElectricVehicles, readEndOfLifeVechicles
-
-from utils.names import MapValues, ModelValues, SliderValues
-from model.html_creator import HTMLCreator
-from view.map import MapView
-
-
+from utils.names import MapValues
 
 
 class MapCreator:
@@ -90,7 +83,7 @@ class MapCreatorRegions(MapCreator):
         
         self.geojson_data = geo_data
         self.indexes = [f["properties"]["NUTS_NAME"] for f in self.geojson_data["features"]]
-        self.values = [1 + i % 5 for i in range(len(self.indexes))]  # przykładowe dane
+        self.values = [1 + i % 5 for i in range(len(self.indexes))]
         self.map = self.__draw_map()
 
     def set_values(self,values):
@@ -114,7 +107,7 @@ class MapCreatorRegions(MapCreator):
         )
 
         fig.update_geos(
-            center={"lat": 32.0, "lon": 19.0},  # Środek Polski
+            center={"lat": 32.0, "lon": 19.0}, 
             projection_scale=5,
         )
 

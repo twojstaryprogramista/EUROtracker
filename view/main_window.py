@@ -52,9 +52,9 @@ class Window(QWidget):
                     self.regions_map.setParent(None)
                 self.workspace.setParent(None)
                 
-                spacer = QSpacerItem(0, 480, QSizePolicy.Minimum, QSizePolicy.Fixed)  # wysokość 100px
+                spacer = QSpacerItem(0, 480, QSizePolicy.Minimum, QSizePolicy.Fixed)
 
-                self.layout.insertSpacerItem(1, spacer)  # na miejsce 1 (tam gdzie był widget)
+                self.layout.insertSpacerItem(1, spacer)
 
                 self._current_spacer = spacer
         else:
